@@ -1,4 +1,5 @@
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
@@ -42,6 +43,11 @@ public interface DataNode {
 					is.read(buffer);
 					String strReceiv = new String(buffer, StandardCharsets.UTF_8);
 					System.out.println("From client: "+strReceiv);
+					
+					String sendClient = "Complete";
+					OutputStream os = s.getOutputStream();
+					byte bufferOutput[] = sendClient.getBytes();
+					os.write(bufferOutput,0,bufferOutput.length);
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
