@@ -20,8 +20,8 @@ public class NameNodeImpl extends UnicastRemoteObject implements NameNode, Regis
 
 	@Override
 	public void registerDataNode(Host h) throws RemoteException {
-		dataNodeTable.put(h.getHost(), h);
-		
+		String a = String.valueOf(h.getPort());
+		dataNodeTable.put(a, h);	
 	}
 	
 	@Override
