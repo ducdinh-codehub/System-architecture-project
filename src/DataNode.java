@@ -12,6 +12,7 @@ import java.util.Hashtable;
 import java.util.Scanner;
 
 public interface DataNode {
+	public static byte fileContent[] = new byte[1024]; 
 	public static void main(String args[]) {
 			
 			Scanner sc1 = new Scanner(System.in);
@@ -19,12 +20,6 @@ public interface DataNode {
 			String host = sc1.nextLine();
 			sc1.close();
 			
-			/*
-			Scanner sc2 = new Scanner(System.in);
-			System.out.println("Typing port");
-			int port = sc2.nextInt();
-			sc2.close();
-			*/
 			int port = Integer.parseInt(args[0]);
 			System.out.println("Open port: "+port);
 			Host h = new HostImpl(host,port);
@@ -44,7 +39,7 @@ public interface DataNode {
 					String strReceiv = new String(buffer, StandardCharsets.UTF_8);
 					System.out.println("From client: "+strReceiv);
 					
-					String sendClient = "Complete";
+					String sendClient = "Complete!!!";
 					OutputStream os = s.getOutputStream();
 					byte bufferOutput[] = sendClient.getBytes();
 					os.write(bufferOutput,0,bufferOutput.length);
