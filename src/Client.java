@@ -11,7 +11,7 @@ public class Client implements ManageFile{
 	public static int port[] = new int[10];
 	public static String host[] = new String[10];
 	public static void store(int addressIndex, String filename) {
-		UploadThread up = new UploadThread(addressIndex);
+		UploadThread up = new UploadThread(addressIndex,filename);
 		up.start();
 	}
 
@@ -39,7 +39,8 @@ public class Client implements ManageFile{
 				System.out.println(a.getHost()+":"+a.getPort());
 			}
 			for(int i = 0; i < ListInformationOfDataNode.size(); i++) {
-				String fileName = "Non";
+				String fileName = "videoTest2.mp4";
+				//String fileName = "helloWorld.txt";
 				store(i,fileName);
 				//UploadThread up = new UploadThread(i);
 				//up.start();
@@ -56,8 +57,10 @@ public class downloadThread extends Thread{
 }*/
 class UploadThread extends Thread{
 	int addressIndex;
-	public UploadThread(int i) {
+	String filename;
+	public UploadThread(int i, String fn) {
 		this.addressIndex = i;
+		this.filename = fn;
 	}
 	public void run() {
 			String host = Client.host[this.addressIndex];
@@ -65,16 +68,22 @@ class UploadThread extends Thread{
 			
 			String sendServer = "Send to server";
 			try {
+				// Open file
+				File f = new File("/home/duc/eclipse-workspace/Project/src/video/"+this.filename);
 				Socket threadSocket = new Socket(host,port);
-				OutputStream cos = threadSocket.getOutputStream();
-				byte bufferOutput[] = sendServer.getBytes();
-				cos.write(bufferOutput,0,bufferOutput.length);
-				
-				InputStream is = threadSocket.getInputStream();
-				byte bufferInput[] = new byte[1024];
-				is.read(bufferInput);
-				String strReceiv = new String(bufferInput,StandardCharsets.UTF_8);
-				System.out.println("From server: "+strReceiv);
+				FileInputStream is = new FileInputStream(f);
+				OutputStream os = threadSocket.getOutputStream();
+				byte bytes[] = new byte[256*1024]; // 256 KB
+				int nb=0;
+				while(true){
+					nb = is.read(bytes,0,bytes.length);
+					if(nb == -1) {
+						break;
+					}
+					os.write(bytes, 0, nb);
+					os.flush();
+				}
+				System.out.println("Sended: "+bytes.length+" bytes");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

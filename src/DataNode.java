@@ -1,9 +1,12 @@
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.Buffer;
 import java.nio.charset.StandardCharsets;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -34,18 +37,19 @@ public interface DataNode {
 				while(true) {
 					Socket s = ss.accept();
 					InputStream is = s.getInputStream();
-					byte buffer[] = new byte[1024];
-					is.read(buffer);
-					String strReceiv = new String(buffer, StandardCharsets.UTF_8);
-					System.out.println("From client: "+strReceiv);
-					
-					String sendClient = "Complete!!!";
-					OutputStream os = s.getOutputStream();
-					byte bufferOutput[] = sendClient.getBytes();
-					os.write(bufferOutput,0,bufferOutput.length);
+					OutputStream os = new FileOutputStream("/home/duc/eclipse-workspace/Project/src/videoServer/"+args[0]+"_SaveFile.mp4");
+					byte buffer[] = new byte[256*1024];
+					int nb = 0;
+					while(true) {
+						nb = is.read(buffer,0,buffer.length);
+						if(nb == -1) {
+							break;
+						}
+						os.write(buffer, 0, nb);
+					}
+					System.out.println("Done");
 				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	}
