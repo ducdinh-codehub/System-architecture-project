@@ -4,8 +4,9 @@ import java.nio.file.Files;
 public class testReadFile {
 	public static void main(String args[]) {
 		System.out.println("Hello World");
-		String FileName = "/home/duc/Downloads/Motivational short video - How to succeed - cartoon.mp4";
+		String FileName = "/home/duc/eclipse-workspace/Project/src/videoServer/8081Video/video2gb.mp4";
 		File file = new File(FileName);
+		System.out.println("Size: "+file.length());
 		//long numberOfEachSplittingFile = 3;
 		//long sizeForEachSplittingFile = file.length()/numberOfEachSplittingFile;
 		//long remainSizeFoerEachSplittingFile = totalSize % numberOfEachSplittingFile;

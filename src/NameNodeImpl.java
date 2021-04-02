@@ -4,7 +4,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Hashtable;
 
-public class NameNodeImpl extends UnicastRemoteObject implements NameNode, Registration, Consulation{
+public class NameNodeImpl extends UnicastRemoteObject implements NameNode, Registration, 
+Consulation{
 	
 	private static final long serialVersionUID = 1L;
 	Hashtable<String, Host> dataNodeTable = new Hashtable<String, Host>();
