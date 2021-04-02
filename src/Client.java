@@ -12,6 +12,7 @@ public class Client implements ManageFile{
 	public static String host[] = new String[10];
 	public static int hnb = 0;
 	public static Hashtable<String, Host> listOfDataNode;
+
 	public static void store(int addressIndex, String filename) {
 		UploadThread up = new UploadThread(addressIndex,filename);
 		up.start();
@@ -44,13 +45,14 @@ public class Client implements ManageFile{
 			Scanner sc = new Scanner(System.in);
 			//System.out.println("Do you want to store or download");
 			//String choose = sc.nextLine();
+			OutputStream osDW = new FileOutputStream("/home/duc/eclipse-workspace/testData/testDownload/video_newFunc.mp4");
 			for(int i = 0; i < ListInformationOfDataNode.size(); i++) {
 					//String fileName = "video171mb.mp4";
 				    String fileName = "videoTest.mp4";
 				    //String fileName = "video1gb.mp4";
 					//String fileName = "video28mb.mp4";
 					//store(i,fileName);
-					DownloadThread dt = new DownloadThread(i, fileName);
+					DownloadThread dt = new DownloadThread(i, fileName, osDW);
 					dt.start();
 			}
 		} catch (Exception e) {
@@ -63,9 +65,11 @@ public class Client implements ManageFile{
 class DownloadThread extends Thread{
 	int addressIndex;
 	String filename;
-	public DownloadThread(int i, String fn) {
+	OutputStream os;
+	public DownloadThread(int i, String fn, OutputStream sp) {
 		this.addressIndex = i;
 		this.filename = fn;
+		this.os = sp;
 	}
 	public void run() {
 		String host = Client.host[this.addressIndex];
@@ -79,19 +83,20 @@ class DownloadThread extends Thread{
 		
 			InputStream is = threadSocket.getInputStream();
 			//OutputStream os = new FileOutputStream("video.mp4");
-			OutputStream os = new FileOutputStream("/home/duc/eclipse-workspace/testData/testDownload/" + port + "_video.mp4");
 			byte buffer[] = new byte[1024];
 			int nbr = 0;
+			int countTotalByte = 0;
 			while(true) {
 				nbr = is.read(buffer, 0, buffer.length);
+				countTotalByte+=nbr;
+				System.out.println("From: "+port+" client receive: "+countTotalByte);
 				if(nbr == -1) {
-					
 					break;
 				}
 				os.write(buffer, 0, nbr);
 			}
-			is.close();
-			os.close();
+			//is.close();
+			//os.close();
 			threadSocket.close();
 		}
 		catch(Exception e) {

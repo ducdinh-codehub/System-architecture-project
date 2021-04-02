@@ -17,7 +17,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Hashtable;
 import java.util.Scanner;
-
+import java.util.concurrent.Semaphore;
 import java.nio.file.Files;
 
 public class DataNode {
@@ -106,8 +106,41 @@ public class DataNode {
 						int nbr = 0;
 						int countTotalByte = 0;
 						int checkFirstTime = 1;
-	
+						
 						while(true) {
+							nbr = fis.read(buffer,0,buffer.length);
+							if(nbr==-1) {
+								break;
+							}
+							countTotalByte+=nbr;
+							int limitedEnd = countTotalByte + maxByte;
+							if(limitedEnd > endPosition) {
+								int sendBytes = endPosition - (limitedEnd - maxByte);
+								if(sendBytes > maxByte) {
+									int numRead = sendBytes / maxByte;
+									int remainBytes = sendBytes & maxByte;
+									for(int i = 0; i < numRead; i++) {
+										fos.write(buffer,0,maxByte);
+									}
+									if(remainByte > 0) {
+										fos.write(buffer,0,remainBytes);
+									}
+								}else {
+									fos.write(buffer,0,sendBytes);
+								}
+								break;
+							}
+							if(countTotalByte >= startPosition && countTotalByte <= endPosition) {
+								if(checkFirstTime==1) {
+									System.out.println("Start at byte: "+countTotalByte);
+									checkFirstTime = 0;
+								}
+								System.out.println("Start write");
+								fos.write(buffer, 0, nbr);
+							}
+						}
+						
+						/*while(true) {
 							nbr = fis.read(buffer,0,buffer.length);
 							if(nbr==-1) {
 								break;
@@ -132,19 +165,20 @@ public class DataNode {
 									}
 								}
 								else {
-									System.out.println("Ending Send bytes < max bytes");
-									//fos.write(buffer, 0, sendBytes);
 									
-									int splitSendBytes = sendBytes / maxByte;
-									int remainSplitSendBytes = sendBytes % maxByte;
-									for(int i = 0; i < splitSendBytes; i++) {
-										fos.write(buffer, 0, buffer.length);
-										countTotalByte += buffer.length;
-									}
-									if(remainSplitSendBytes > 0) {
-										fos.write(buffer, 0, remainSplitSendBytes);
-										countTotalByte += remainSplitSendBytes;
-									}
+									System.out.println("Ending Send bytes < max bytes");
+									fos.write(buffer, 0, sendBytes);
+									
+//									int splitSendBytes = sendBytes / maxByte;
+//									int remainSplitSendBytes = sendBytes % maxByte;
+//									for(int i = 0; i < splitSendBytes; i++) {
+//										fos.write(buffer, 0, buffer.length);
+//										countTotalByte += buffer.length;
+//									}
+//									if(remainSplitSendBytes > 0) {
+//										fos.write(buffer, 0, remainSplitSendBytes);
+//										countTotalByte += remainSplitSendBytes;
+//									}
 								}
 								System.out.println("End writting at bytes: "+countTotalByte);
 								break;
@@ -188,20 +222,19 @@ public class DataNode {
 											}
 										}else {
 											System.out.println("Starting Send bytes < max bytes");
-											System.out.println("sendBytes:"+sendBytes);
-											//fos.write(buffer, 0, sendBytes);
+											fos.write(buffer, 0, sendBytes);
 											
-											//startByte = countTotalByteTmp + sendBytes;
-											int splitSendBytes = startPosition / maxByte;
-											int remainSplitSendBytes = startPosition % maxByte;
-											for(int i = 0; i < splitSendBytes; i++) {
-												fos.write(buffer, 0, buffer.length);
-												startByte+=maxByte;
-											}
-											if(remainSplitSendBytes > 0) {
-												startByte += remainSplitSendBytes;
-												fos.write(buffer, 0, remainSplitSendBytes);
-											}
+//											System.out.println("sendBytes:"+sendBytes);
+//											int splitSendBytes = startPosition / maxByte;
+//											int remainSplitSendBytes = startPosition % maxByte;
+//											for(int i = 0; i < splitSendBytes; i++) {
+//												fos.write(buffer, 0, buffer.length);
+//												startByte+=maxByte;
+//											}
+//											if(remainSplitSendBytes > 0) {
+//												startByte += remainSplitSendBytes;
+//												fos.write(buffer, 0, remainSplitSendBytes);
+//											}
 										}
 										System.out.println("Start writting at bytes: "+startByte);
 									}
@@ -210,7 +243,7 @@ public class DataNode {
 									fos.write(buffer,0,nbr);
 								}
 							}
-						}
+						}*/
 						// Read file, seperating and sending each small part to client.
 						/*
 						while(true) {
