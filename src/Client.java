@@ -46,6 +46,7 @@ public class Client implements ManageFile{
 			//System.out.println("Do you want to store or download");
 			//String choose = sc.nextLine();
 			OutputStream osDW = new FileOutputStream("/home/duc/eclipse-workspace/testData/testDownload/video_newFunc.mp4");
+			//OutputStream osDW = new FileOutputStream("/video/video_newFunc.mp4");
 			for(int i = 0; i < ListInformationOfDataNode.size(); i++) {
 					//String fileName = "video171mb.mp4";
 				    String fileName = "videoTest.mp4";
@@ -82,7 +83,6 @@ class DownloadThread extends Thread{
 			outputNameObject.writeObject("download-"+this.filename+"-"+this.addressIndex+"-"+Client.hnb);	
 		
 			InputStream is = threadSocket.getInputStream();
-			//OutputStream os = new FileOutputStream("video.mp4");
 			byte buffer[] = new byte[1024];
 			int nbr = 0;
 			int countTotalByte = 0;
@@ -121,6 +121,7 @@ class UploadThread extends Thread{
 			try {
 				// Open file
 				File f = new File("/home/duc/eclipse-workspace/Project/src/video/"+this.filename);
+				//File f = new File("/video/"+this.filename);
 				Socket threadSocket = new Socket(host,port);
 				
 				//Sending file name

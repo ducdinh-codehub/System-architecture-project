@@ -60,6 +60,7 @@ public class DataNode {
 						System.out.println("Store mode");
 						InputStream is = s.getInputStream();
 						OutputStream os = new FileOutputStream("/home/duc/eclipse-workspace/testData/videoServer/"+args[0]+"Video/"+nameFile);
+						//OutputStream os = new FileOutputStream("/videoServer/"+args[0]+"Video/"+nameFile);
 						byte buffer[] = new byte[256*1024];
 						int nb = 0;
 						while(true) {
@@ -76,6 +77,7 @@ public class DataNode {
 						int downloadOrder = Integer.parseInt(rqSplit[2]);
 						System.out.println("Boosting host number: "+downloadOrder);
 						File f = new File("/home/duc/eclipse-workspace/testData/videoServer/"+args[0]+"Video/"+nameFile);
+						//File f = new File("/videoServer/"+args[0]+"Video/"+nameFile);
 						int totalSize = (int) f.length();
 						InputStream is = new FileInputStream(f);
 						
