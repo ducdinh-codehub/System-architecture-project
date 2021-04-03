@@ -121,7 +121,7 @@ public class DataNode {
 								System.out.println("Pre ending at byte: "+countTotalByte);
 								int sendBytes = endPosition - (limitedEnd - maxByte);
 								if(sendBytes > maxByte) {
-									System.out.print("sendBytes > maxByte");
+									System.out.println("sendBytes > maxByte");
 									int numRead = sendBytes / maxByte;
 									int remainBytes = sendBytes & maxByte;
 									for(int i = 0; i < numRead; i++) {
@@ -135,15 +135,16 @@ public class DataNode {
 										toTalByte+=remainBytes;
 									}
 									System.out.println("Ending at byte: "+countTotalByte);
-								}else {
-									System.out.print("sendBytes < maxByte");
+								}
+								else {
+									System.out.println("sendBytes < maxByte");
 									fos.write(buffer,0,sendBytes);
 									System.out.println("Ending at byte: "+sendBytes);
 									toTalByte+=sendBytes;
 								}
 								break;
 							}
-							if(countTotalByte >= startPosition && countTotalByte <= endPosition) {
+							if(countTotalByte >= startPosition+1 && countTotalByte <= endPosition) {
 								if(checkFirstTime==1) {
 									System.out.println("Start at byte: "+countTotalByte);
 									checkFirstTime = 0;
