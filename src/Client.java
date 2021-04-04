@@ -13,8 +13,8 @@ public class Client implements ManageFile{
 	public static int hnb = 0;
 	public static Hashtable<String, Host> listOfDataNode;
 
-	public static void store(int addressIndex, String filename) {
-		UploadThread up = new UploadThread(addressIndex,filename);
+	public static void store(int addressIndex, String filename, String filePath) {
+		UploadThread up = new UploadThread(addressIndex,filename, filePath);
 		up.start();
 	}
 
@@ -43,18 +43,55 @@ public class Client implements ManageFile{
 			}
 			hnb = index;
 			Scanner sc = new Scanner(System.in);
-			//System.out.println("Do you want to store or download");
-			//String choose = sc.nextLine();
-			OutputStream osDW = new FileOutputStream("/home/duc/eclipse-workspace/testData/testDownload/video_newFunc.mp4");
-			//OutputStream osDW = new FileOutputStream("/video/video_newFunc.mp4");
-			for(int i = 0; i < ListInformationOfDataNode.size(); i++) {
-					//String fileName = "video171mb.mp4";
-				    String fileName = "videoTest.mp4";
-				    //String fileName = "video1gb.mp4";
-					//String fileName = "video28mb.mp4";
-					//store(i,fileName);
-					DownloadThread dt = new DownloadThread(i, fileName, osDW);
-					dt.start();
+			System.out.println("----------------------------------SETUP SECTION----------------------------------");
+			System.out.println("*Note: you should choose 'use mode' ");
+			
+			System.out.println("Do you want to use application or test application(type u for use/ t for test)");
+			String chooseMode = sc.nextLine();
+			System.out.println("Choose mode: "+chooseMode);
+			boolean chck = chooseMode.isEmpty();
+			System.out.println(chck);
+			OutputStream osDW = null;
+			String upLoadFilePath = ""; // For upload file
+			if(chooseMode.equals("u")) {
+				osDW = new FileOutputStream("/video/video_newFunc.mp4");
+				upLoadFilePath = "/video/";
+				
+			}
+			if(chooseMode.equals("t")){
+				osDW = new FileOutputStream("/home/duc/eclipse-workspace/testData/testDownload/video_newFunc.mp4");
+				upLoadFilePath = "/home/duc/eclipse-workspace/Project/src/video/";
+			}
+			if(chooseMode.isEmpty()==false) {
+				Scanner sc2 = new Scanner(System.in);
+				System.out.println("Do you want to store or download(type s for store/ d dor download)");
+				String chooseFeature = sc2.nextLine();
+				boolean chck2 = chooseFeature.equals("d");
+				System.out.println(chck2);
+				System.out.println("---------------------------------------------------------------------------------");
+				if(chooseFeature.equals("s")) {
+					for(int i = 0; i < ListInformationOfDataNode.size(); i++) {
+						//String fileName = "video171mb.mp4";
+					    String fileName = "videoTest.mp4";
+					    //String fileName = "video1gb.mp4";
+						//String fileName = "video28mb.mp4";
+						store(i,fileName,upLoadFilePath);
+						System.out.println("Upload done");
+					}
+				}
+				if(chooseFeature.equals("d")) {
+					System.out.println("Choose feature: "+chooseFeature);
+					for(int i = 0; i < ListInformationOfDataNode.size(); i++) {
+						//String fileName = "video171mb.mp4";
+					    String fileName = "videoTest.mp4";
+					    //String fileName = "video1gb.mp4";
+						//String fileName = "video28mb.mp4";
+						//store(i,fileName);
+						DownloadThread dt = new DownloadThread(i, fileName, osDW);
+						dt.start();
+					}
+					System.out.println("Download done");
+				}
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -109,9 +146,11 @@ class DownloadThread extends Thread{
 class UploadThread extends Thread{
 	int addressIndex;
 	String filename;
-	public UploadThread(int i, String fn) {
+	String filepath;
+	public UploadThread(int i, String fn, String fp) {
 		this.addressIndex = i;
 		this.filename = fn;
+		this.filename = fp;
 	}
 	public void run() {
 			String host = Client.host[this.addressIndex];
@@ -120,7 +159,8 @@ class UploadThread extends Thread{
 			String sendServer = "Send to server";
 			try {
 				// Open file
-				File f = new File("/home/duc/eclipse-workspace/Project/src/video/"+this.filename);
+				//File f = new File("/home/duc/eclipse-workspace/Project/src/video/"+this.filename);
+				File f = new File(filepath + this.filename);
 				//File f = new File("/video/"+this.filename);
 				Socket threadSocket = new Socket(host,port);
 				

@@ -128,7 +128,7 @@ public class DataNode {
 									int remainBytes = sendBytes & maxByte;
 									for(int i = 0; i < numRead; i++) {
 										fos.write(buffer,0,maxByte);
-										countTotalByte+=1024;
+										countTotalByte+=maxByte;
 										toTalByte+=nbr;
 									}
 									if(remainByte > 0) {
@@ -145,10 +145,7 @@ public class DataNode {
 									toTalByte+=sendBytes;
 								}
 								break;
-							}
-							fos.write(buffer, 0, nbr);
-							toTalByte+=nbr;
-							/*
+							}							
 							if(countTotalByte >= startPosition+1 && countTotalByte <= endPosition) {
 								if(checkFirstTime==1) {
 									System.out.println("Start at byte: "+countTotalByte);
@@ -157,7 +154,7 @@ public class DataNode {
 								}
 								fos.write(buffer, 0, nbr);
 								toTalByte+=nbr;
-							}*/
+							}
 						}
 						System.out.println("Total bytes are written: "+toTalByte);
 						
