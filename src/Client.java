@@ -48,9 +48,6 @@ public class Client implements ManageFile{
 			
 			System.out.println("Do you want to use application or test application(type u for use/ t for test)");
 			String chooseMode = sc.nextLine();
-			System.out.println("Choose mode: "+chooseMode);
-			boolean chck = chooseMode.isEmpty();
-			System.out.println(chck);
 			OutputStream osDW = null;
 			String upLoadFilePath = ""; // For upload file
 			if(chooseMode.equals("u")) {
@@ -66,8 +63,6 @@ public class Client implements ManageFile{
 				Scanner sc2 = new Scanner(System.in);
 				System.out.println("Do you want to store or download(type s for store/ d dor download)");
 				String chooseFeature = sc2.nextLine();
-				boolean chck2 = chooseFeature.equals("d");
-				System.out.println(chck2);
 				System.out.println("---------------------------------------------------------------------------------");
 				if(chooseFeature.equals("s")) {
 					for(int i = 0; i < ListInformationOfDataNode.size(); i++) {

@@ -36,6 +36,13 @@ public class DataNode {
 			Host h = new HostImpl(host,port);
 			
 			System.out.println("Start server at: //"+h.getHost()+":"+h.getPort());
+			
+			System.out.println("----------------------------------SETUP SECTION----------------------------------");
+			System.out.println("*Note: you should choose 'use mode' ");
+			System.out.println("Do you want to use application or test application(type u for use/ t for test)");
+			Scanner sc = new Scanner(System.in);
+			String chooseMode = sc.nextLine();
+			System.out.println("---------------------------------------------------------------------------------");
 			try {
 				NameNode nn = (NameNode) Naming.lookup("//localhost/nameNode");
 				nn.registor(h);
@@ -58,9 +65,15 @@ public class DataNode {
 					if(mode.equals("store")) {
 						//Get file from client
 						System.out.println("Store mode");
+
+						OutputStream os = null;
+						if(chooseMode.equals("t")) {
+							os = new FileOutputStream("/home/duc/eclipse-workspace/testData/videoServer/"+args[0]+"Video/"+nameFile);
+						}
+						if(chooseMode.equals("u")) {
+							os = new FileOutputStream("/videoServer/"+args[0]+"Video/"+nameFile);
+						}
 						InputStream is = s.getInputStream();
-						OutputStream os = new FileOutputStream("/home/duc/eclipse-workspace/testData/videoServer/"+args[0]+"Video/"+nameFile);
-						//OutputStream os = new FileOutputStream("/videoServer/"+args[0]+"Video/"+nameFile);
 						byte buffer[] = new byte[256*1024];
 						int nb = 0;
 						while(true) {
@@ -74,10 +87,17 @@ public class DataNode {
 					}
 					else {
 						System.out.println("Download mode");
+						
 						int downloadOrder = Integer.parseInt(rqSplit[2]);
 						System.out.println("Boosting host number: "+downloadOrder);
-						File f = new File("/home/duc/eclipse-workspace/testData/videoServer/"+args[0]+"Video/"+nameFile);
-						//File f = new File("/videoServer/"+args[0]+"Video/"+nameFile);
+						
+						File f = null;
+						if(chooseMode.equals("t")) {
+							f = new File("/home/duc/eclipse-workspace/testData/videoServer/"+args[0]+"Video/"+nameFile);
+						}
+						if(chooseMode.equals("u")) {
+							f = new File("/videoServer/"+args[0]+"Video/"+nameFile);
+						}
 						int totalSize = (int) f.length();
 						InputStream is = new FileInputStream(f);
 						
