@@ -18,9 +18,10 @@ public class Client implements ManageFile{
 		up.start();
 	}
 
-	@Override
-	public void download(String filename) {
 	
+	public static void download(int addressIndex, String filename, OutputStream osDW) {
+		DownloadThread dt = new DownloadThread(addressIndex, filename, osDW);
+		dt.start();
 	}
 	public static void main(String args[]) {
 		NameNode nn;
@@ -29,17 +30,14 @@ public class Client implements ManageFile{
 			nn = (NameNode) Naming.lookup("//localhost/nameNode");
 			listOfDataNode = nn.consult();
 			int numberOfDataNode = listOfDataNode.size();
-			System.out.println("Number of data node: "+numberOfDataNode);
-			System.out.println(listOfDataNode.get("8082").getHost());
 			List<Host> ListInformationOfDataNode = new ArrayList<>(listOfDataNode.values());
 			Iterator<Host> itr = ListInformationOfDataNode.iterator();
-			System.out.println("Hello");
+			System.out.println("Start client");
 			while(itr.hasNext()) {
 				Host a = itr.next();
 				port[index] = a.getPort();
 				host[index] = a.getHost();
 				index = index+1;
-				System.out.println(a.getHost()+":"+a.getPort());
 			}
 			hnb = index;
 			Scanner sc = new Scanner(System.in);
@@ -64,15 +62,38 @@ public class Client implements ManageFile{
 				System.out.println("Do you want to store or download(type s for store/ d dor download)");
 				String chooseFeature = sc2.nextLine();
 				System.out.println("---------------------------------------------------------------------------------");
+				
+				System.out.println("----------------------------------SEARCH SECTION----------------------------------");
+				Scanner sc3 = new Scanner(System.in);
+				String typingFileName;
+				File f;
+				while(true) {
+					System.out.println("File name you want to store: ");
+					typingFileName = sc3.nextLine();
+					typingFileName = "./video/" + typingFileName;
+					System.out.println("typingFileName"+typingFileName);
+					f = new File(typingFileName);
+					if(f.exists()) {
+						System.out.println("File exist");
+						break;
+					}else {
+						System.out.println("file is not exist please try again");
+						
+					}
+				}
+				System.out.println("----------------------------------------------------------------------------------");
+				
 				if(chooseFeature.equals("s")) {
 					for(int i = 0; i < ListInformationOfDataNode.size(); i++) {
 						//String fileName = "video171mb.mp4";
-					    String fileName = "videoTest.mp4";
+					    //String fileName = "videoTest.mp4";
+					    String fileName = typingFileName;
 					    //String fileName = "video1gb.mp4";
 						//String fileName = "video28mb.mp4";
 						store(i,fileName,upLoadFilePath);
-						System.out.println("Upload done");
+						
 					}
+					System.out.println("Upload done");
 				}
 				if(chooseFeature.equals("d")) {
 					System.out.println("Choose feature: "+chooseFeature);
@@ -82,8 +103,8 @@ public class Client implements ManageFile{
 					    //String fileName = "video1gb.mp4";
 						//String fileName = "video28mb.mp4";
 						//store(i,fileName);
-						DownloadThread dt = new DownloadThread(i, fileName, osDW);
-						dt.start();
+					    download(i, fileName, osDW);
+						
 					}
 					System.out.println("Download done");
 				}
