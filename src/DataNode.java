@@ -146,6 +146,9 @@ public class DataNode {
 								}
 								break;
 							}
+							fos.write(buffer, 0, nbr);
+							toTalByte+=nbr;
+							/*
 							if(countTotalByte >= startPosition+1 && countTotalByte <= endPosition) {
 								if(checkFirstTime==1) {
 									System.out.println("Start at byte: "+countTotalByte);
@@ -154,7 +157,7 @@ public class DataNode {
 								}
 								fos.write(buffer, 0, nbr);
 								toTalByte+=nbr;
-							}
+							}*/
 						}
 						System.out.println("Total bytes are written: "+toTalByte);
 						
