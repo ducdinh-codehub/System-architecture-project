@@ -68,7 +68,7 @@ public class DataNode {
 
 						OutputStream os = null;
 						if(chooseMode.equals("t")) {
-							os = new FileOutputStream("/home/duc/eclipse-workspace/testData/videoServer/"+args[0]+"Video/"+nameFile);
+							os = new FileOutputStream("/home/duc/eclipse-workspace/Project/src/videoServer/"+args[0]+"Video/"+nameFile);
 						}
 						if(chooseMode.equals("u")) {
 							os = new FileOutputStream("/videoServer/"+args[0]+"Video/"+nameFile);

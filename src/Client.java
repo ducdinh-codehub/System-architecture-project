@@ -85,9 +85,10 @@ public class Client implements ManageFile{
 				while(true) {
 					System.out.println("File name you want to store: ");
 					typingFileName = sc3.nextLine();
-					typingFileName = "./video/" + typingFileName;
-					System.out.println("typingFileName"+typingFileName);
-					f = new File(typingFileName);
+					String FilePath = "./video/" + typingFileName;
+					
+					System.out.println("typingFileName"+FilePath);
+					f = new File(FilePath);
 					if(f.exists()) {
 						System.out.println("File exist");
 						break;
@@ -103,6 +104,7 @@ public class Client implements ManageFile{
 						//String fileName = "video171mb.mp4";
 					    //String fileName = "videoTest.mp4";
 					    String fileName = typingFileName;
+					    
 					    //String fileName = "video1gb.mp4";
 						//String fileName = "video28mb.mp4";
 						store(i,fileName,upLoadFilePath);
@@ -114,7 +116,9 @@ public class Client implements ManageFile{
 					System.out.println("Choose feature: "+chooseFeature);
 					for(int i = 0; i < ListInformationOfDataNode.size(); i++) {
 						//String fileName = "video171mb.mp4";
-					    String fileName = "videoTest.mp4";
+					    //String fileName = "videoTest.mp4";
+					    
+					    String fileName = typingFileName;
 					    //String fileName = "video1gb.mp4";
 						//String fileName = "video28mb.mp4";
 						//store(i,fileName);
@@ -181,7 +185,7 @@ class UploadThread extends Thread{
 	public UploadThread(int i, String fn, String fp) {
 		this.addressIndex = i;
 		this.filename = fn;
-		this.filename = fp;
+		this.filepath = fp;
 	}
 	public void run() {
 			String host = Client.host[this.addressIndex];
@@ -191,6 +195,8 @@ class UploadThread extends Thread{
 			try {
 				// Open file
 				//File f = new File("/home/duc/eclipse-workspace/Project/src/video/"+this.filename);
+				System.out.println("file path: "+filepath);
+				System.out.println("file name: "+filename);
 				File f = new File(filepath + this.filename);
 				//File f = new File("/video/"+this.filename);
 				Socket threadSocket = new Socket(host,port);
