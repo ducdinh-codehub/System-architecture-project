@@ -42,10 +42,17 @@ public class Client implements ManageFile{
 			hnb = index;
 			Scanner sc = new Scanner(System.in);
 			System.out.println("----------------------------------SETUP SECTION----------------------------------");
-			System.out.println("*Note: you should choose 'use mode' ");
-			
-			System.out.println("Do you want to use application or test application(type u for use/ t for test)");
-			String chooseMode = sc.nextLine();
+			String chooseMode = "";
+			while(true) {
+				System.out.println("*Note: you should choose 'use mode' ");
+				System.out.println("Do you want to use application or test application(type u for use/ t for test)");
+				chooseMode = sc.nextLine();
+				if(chooseMode.isEmpty()==false) {
+					break;
+				}else {
+					System.err.println("*Note: Please choose the mode (u for use mode/ t for test mode)");
+				}
+			}
 			OutputStream osDW = null;
 			String upLoadFilePath = ""; // For upload file
 			if(chooseMode.equals("u")) {
@@ -59,8 +66,16 @@ public class Client implements ManageFile{
 			}
 			if(chooseMode.isEmpty()==false) {
 				Scanner sc2 = new Scanner(System.in);
-				System.out.println("Do you want to store or download(type s for store/ d dor download)");
-				String chooseFeature = sc2.nextLine();
+				String chooseFeature = "";
+				while(true) {
+					System.out.println("Do you want to store or download(type s for store/ d dor download)");
+					chooseFeature = sc2.nextLine();
+					if(chooseFeature.isEmpty()==false) {
+						break;
+					}else {
+						System.err.println("*Note: Please choose the mode (s for store mode/ d for download mode)");
+					}
+				}
 				System.out.println("---------------------------------------------------------------------------------");
 				
 				System.out.println("----------------------------------SEARCH SECTION----------------------------------");
@@ -77,7 +92,7 @@ public class Client implements ManageFile{
 						System.out.println("File exist");
 						break;
 					}else {
-						System.out.println("file is not exist please try again");
+						System.err.println("*Note: file is not exist please try again");
 						
 					}
 				}
